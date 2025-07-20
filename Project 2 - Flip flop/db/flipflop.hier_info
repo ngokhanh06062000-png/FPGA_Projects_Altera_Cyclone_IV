@@ -1,0 +1,8 @@
+|flipflop
+i_clk => r_LED_1.CLK
+i_clk => r_switch_1.CLK
+i_switch_1 => r_switch_1.DATAIN
+i_switch_1 => always0.IN1
+o_LED_1 << r_LED_1.DB_MAX_OUTPUT_PORT_TYPE
+
+

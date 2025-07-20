@@ -1,0 +1,45 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "o_Segment2_A",
+					"strict" : false
+				},
+				{
+					"name" : "o_Segment2_B",
+					"strict" : false
+				},
+				{
+					"name" : "o_Segment2_C",
+					"strict" : false
+				},
+				{
+					"name" : "o_Segment2_D",
+					"strict" : false
+				},
+				{
+					"name" : "o_Segment2_E",
+					"strict" : false
+				},
+				{
+					"name" : "o_Segment2_F",
+					"strict" : false
+				},
+				{
+					"name" : "o_Segment2_G",
+					"strict" : false
+				},
+				{
+					"name" : "i_Clk",
+					"strict" : false
+				},
+				{
+					"name" : "i_Switch_1",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

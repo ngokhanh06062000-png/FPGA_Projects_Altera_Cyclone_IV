@@ -1,0 +1,31 @@
+|Debounce_switch_project
+i_Clk => i_Clk.IN1
+i_Switch_1 => i_Switch_1.IN1
+o_LED_1 << r_LED_1.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|Debounce_switch_project|Debounce_switch:Debounce_Inst
+i_Clk => r_State.CLK
+i_Clk => r_Count[0].CLK
+i_Clk => r_Count[1].CLK
+i_Clk => r_Count[2].CLK
+i_Clk => r_Count[3].CLK
+i_Clk => r_Count[4].CLK
+i_Clk => r_Count[5].CLK
+i_Clk => r_Count[6].CLK
+i_Clk => r_Count[7].CLK
+i_Clk => r_Count[8].CLK
+i_Clk => r_Count[9].CLK
+i_Clk => r_Count[10].CLK
+i_Clk => r_Count[11].CLK
+i_Clk => r_Count[12].CLK
+i_Clk => r_Count[13].CLK
+i_Clk => r_Count[14].CLK
+i_Clk => r_Count[15].CLK
+i_Clk => r_Count[16].CLK
+i_Clk => r_Count[17].CLK
+i_Switch => always0.IN1
+i_Switch => r_State.DATAB
+o_Switch <= r_State.DB_MAX_OUTPUT_PORT_TYPE
+
+

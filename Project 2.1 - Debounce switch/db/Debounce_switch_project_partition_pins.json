@@ -1,0 +1,21 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "o_LED_1",
+					"strict" : false
+				},
+				{
+					"name" : "i_Clk",
+					"strict" : false
+				},
+				{
+					"name" : "i_Switch_1",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

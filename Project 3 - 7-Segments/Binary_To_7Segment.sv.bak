@@ -1,0 +1,12 @@
+module Binary_To_7Segment
+(
+input logic 		i_Clk,
+input logic [3:0] i_Binary_Num,
+output logic		o_Segment_A,
+output logic 		o_Segment_B,
+output logic 		o_Segment_C,
+output logic 		o_Segment_D,
+output logic 		o_Segment_E,
+output logic 		o_Segment_F,
+output logic 		o_Segment_G
+);
