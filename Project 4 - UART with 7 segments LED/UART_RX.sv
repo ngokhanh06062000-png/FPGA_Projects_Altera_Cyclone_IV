@@ -1,0 +1,102 @@
+module UART_RX 
+#(
+	parameter int CLKS_PER_BIT = 438			// Number period of clock = bit of UART
+)
+(
+	input logic 			i_Clock,				// Clock system
+	input logic 			i_RX_Serial,		// input UART (RX)
+	output logic 			o_RX_DV,				// Flag data varriable 
+	output logic [7:0] 	o_RX_Byte			// Data (byte)
+);
+	// FSM for RX UART
+	typedef enum logic [2:0] {
+		IDLE,			    // Wait signal_start (low) 
+		RX_START_BIT,		// Checking bit_start
+		RX_DATA_BITS,		// Receiving bits_data
+		RX_STOP_BIT,		// Receiving bit_stop (high)
+		CLEANUP
+	} state_t;
+	
+	// Registers for FSM
+	
+	state_t			r_SM_Main		= IDLE; 	// current status of FSM	
+	logic [7:0]		r_Clock_Count 	= 0;		// Counter periods of clock
+	logic [2:0]    		r_Bit_Index 	= 0;		// Index of data_bits (0 - 7)
+	logic [7:0]		r_RX_Byte 		= 0;		// Data_Byte 
+	logic 			r_RX_DV 			= 0;		// Flag FSM
+	
+	// FSM control synchronous logic block
+	always_ff @(posedge i_Clock) begin
+		case (r_SM_Main)
+			
+			// Bit start = 0
+			IDLE: begin
+				r_RX_DV	<= 0;				// Delete flag
+				r_Clock_Count <= 0;		// Reset counter 
+				r_Bit_Index <= 0;			// Reset index bits
+				
+				if (i_RX_Serial == 0)	
+					r_SM_Main <= RX_START_BIT;
+			end
+			
+			// Check bit_start
+			RX_START_BIT: begin
+				if (r_Clock_Count == (CLKS_PER_BIT - 1)/2) begin
+					if (i_RX_Serial == 0) begin 
+						r_Clock_Count <= 0;
+						r_SM_Main 	  <= RX_DATA_BITS;
+					end else begin
+						r_SM_Main <= IDLE;
+					end
+				end else begin
+					r_Clock_Count <= r_Clock_Count + 1;
+				end 
+			end
+			
+			// Receive 8 bits data, each bit is CLKS_PER_BIT periods apart
+			RX_DATA_BITS: begin
+				if (r_Clock_Count < CLKS_PER_BIT - 1) begin 
+					r_Clock_Count <= r_Clock_Count + 1; 
+				end else begin
+					r_Clock_Count <= 0;
+					r_RX_Byte[r_Bit_Index] <= i_RX_Serial;
+					
+					if (r_Bit_Index < 7) begin
+						r_Bit_Index <= r_Bit_Index + 1;
+					end else begin
+						r_Bit_Index <= 0;
+						r_SM_Main 	<= RX_STOP_BIT;
+					end
+				end
+			end
+			
+			// Receive bit stop (only 1), wait CLKS_PER_BIT period 
+			RX_STOP_BIT: begin
+				if (r_Clock_Count < CLKS_PER_BIT - 1) begin
+					r_Clock_Count <= r_Clock_Count + 1;
+				end else begin
+					r_RX_DV			<= 1;
+					r_Clock_Count 	<= 0;
+					r_SM_Main		<= CLEANUP;
+				end
+			end
+			
+			// STATUS: CLEANUP
+			CLEANUP: begin
+				r_SM_Main <= IDLE;
+				r_RX_DV <= 0;
+			end
+			
+			default: r_SM_Main <= IDLE;
+			
+		endcase
+	end
+	
+	// Output 
+	assign o_RX_DV = r_RX_DV;		// valid byte flag
+	assign o_RX_Byte = r_RX_Byte;	// bytes of data received
+
+endmodule
+			
+					
+	
